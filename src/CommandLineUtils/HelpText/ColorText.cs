@@ -8,13 +8,15 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
     internal struct ColorText
     {
         private const string EscapeCode = "\u001b[";
-        public const string AnsiResetColorCommand = EscapeCode + "0m";
+        private const string Reset = EscapeCode + "0m";
         private readonly string _text;
 
         public ColorText(string text, ConsoleColor? color, ConsoleColor? backgroundColor = null)
         {
-            _text = AnsiColorCommand(color, backgroundColor) + text + AnsiResetColorCommand;
+            _text = AnsiColorCommand(color, backgroundColor) + text + AnsiResetColorCommand();
         }
+
+        public static bool Enabled { get; set; }
 
         public override string ToString() => _text;
 
@@ -23,8 +25,18 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
             return colorText._text;
         }
 
+        public static string AnsiResetColorCommand()
+        {
+            return Enabled ? Reset : string.Empty;
+        }
+
         public static string AnsiColorCommand(ConsoleColor? color, ConsoleColor? backgroundColor = null)
         {
+            if (!Enabled)
+            {
+                return string.Empty;
+            }
+
             static string FormatColorCommand((int ansiColorCode, string modifier) command) => $"{EscapeCode}{command.ansiColorCode}{command.modifier}m";
 
             string? foregroundColorCommand = color == null

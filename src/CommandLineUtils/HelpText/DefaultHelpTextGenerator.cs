@@ -353,7 +353,7 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
                 sb.Append(ColorText.AnsiColorCommand(ConsoleColor.Cyan))
                     .Append(prefix)
                     .Append(name)
-                    .Append(ColorText.AnsiResetColorCommand);
+                    .Append(ColorText.AnsiResetColorCommand());
             }
 
             AppendOption("-", option.SymbolName);
