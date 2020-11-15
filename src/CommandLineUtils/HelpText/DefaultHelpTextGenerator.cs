@@ -148,12 +148,12 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
 
             if (visibleCommands.Any())
             {
-                output.Write(" [command]");
+                output.Write(new ColorText(" [command]", ConsoleColor.DarkYellow));
             }
 
             if (visibleOptions.Any())
             {
-                output.Write(" [options]");
+                output.Write(new ColorText(" [options]", ConsoleColor.DarkCyan));
             }
 
             foreach (var argument in visibleArguments)
@@ -239,7 +239,7 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
             if (visibleOptions.Any())
             {
                 output.WriteLine();
-                output.WriteLine("Options:");
+                output.WriteLine(new ColorText("Options:", ConsoleColor.DarkCyan));
                 var outputFormat = $"  {{0, -{firstColumnWidth}}}{{1}}";
 
                 foreach (var opt in visibleOptions)
@@ -292,7 +292,7 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
             if (visibleCommands.Any())
             {
                 output.WriteLine();
-                output.WriteLine("Commands:");
+                output.WriteLine(new ColorText("Commands:", ConsoleColor.DarkYellow));
                 var outputFormat = $"  {{0, -{firstColumnWidth}}}{{1}}";
 
                 var orderedCommands = SortCommandsByName
@@ -304,7 +304,7 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
                     var description = cmd.Description;
 
                     var wrappedDescription = IndentWriter?.Write(description);
-                    var message = string.Format(outputFormat, cmd.Name, wrappedDescription);
+                    var message = string.Format(outputFormat, new ColorText(cmd.Name, ConsoleColor.Yellow), wrappedDescription);
 
                     output.Write(message);
                     output.WriteLine();
@@ -313,7 +313,7 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
                 if (application.OptionHelp != null)
                 {
                     output.WriteLine();
-                    output.WriteLine($"Run '{application.Name} [command] {Format(application.OptionHelp)}' for more information about a command.");
+                    output.WriteLine($"Run '{application.Name} {new ColorText("[command]", ConsoleColor.DarkYellow)} {Format(application.OptionHelp)}' for more information about a command.");
                 }
             }
         }
@@ -338,30 +338,27 @@ namespace McMaster.Extensions.CommandLineUtils.HelpText
         protected virtual string Format(CommandOption option)
         {
             var sb = new StringBuilder();
-            if (!string.IsNullOrEmpty(option.SymbolName))
+            void AppendOption(string prefix, string? name)
             {
-                sb.Append('-').Append(option.SymbolName);
-            }
+                if (name == null)
+                {
+                    return;
+                }
 
-            if (!string.IsNullOrEmpty(option.ShortName))
-            {
                 if (sb.Length > 0)
                 {
                     sb.Append('|');
                 }
 
-                sb.Append('-').Append(option.ShortName);
+                sb.Append(ColorText.AnsiColorCommand(ConsoleColor.Cyan))
+                    .Append(prefix)
+                    .Append(name)
+                    .Append(ColorText.AnsiResetColorCommand);
             }
 
-            if (!string.IsNullOrEmpty(option.LongName))
-            {
-                if (sb.Length > 0)
-                {
-                    sb.Append('|');
-                }
-
-                sb.Append("--").Append(option.LongName);
-            }
+            AppendOption("-", option.SymbolName);
+            AppendOption("-", option.ShortName);
+            AppendOption("--", option.LongName);
 
             if (!string.IsNullOrEmpty(option.ValueName) && option.OptionType != CommandOptionType.NoValue)
             {
