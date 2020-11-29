@@ -1,1 +1,14 @@
 #nullable enable
+McMaster.Extensions.CommandLineUtils.ColorOptionAttribute
+McMaster.Extensions.CommandLineUtils.ColorOptionAttribute.ColorOptionAttribute() -> void
+McMaster.Extensions.CommandLineUtils.Conventions.ColorOptionAttributeConvention
+McMaster.Extensions.CommandLineUtils.Conventions.ColorOptionAttributeConvention.Apply(McMaster.Extensions.CommandLineUtils.Conventions.ConventionContext! context) -> void
+McMaster.Extensions.CommandLineUtils.Conventions.ColorOptionAttributeConvention.ColorOptionAttributeConvention() -> void
+McMaster.Extensions.CommandLineUtils.Color.ColorText
+McMaster.Extensions.CommandLineUtils.Color.ColorText.ColorText() -> void
+McMaster.Extensions.CommandLineUtils.Color.ColorText.ColorText(string! text, System.ConsoleColor? color, System.ConsoleColor? backgroundColor = null) -> void
+override McMaster.Extensions.CommandLineUtils.Color.ColorText.ToString() -> string!
+static McMaster.Extensions.CommandLineUtils.ConventionBuilderExtensions.UseColorOptionAttribute(this McMaster.Extensions.CommandLineUtils.Conventions.IConventionBuilder! builder) -> McMaster.Extensions.CommandLineUtils.Conventions.IConventionBuilder!
+static McMaster.Extensions.CommandLineUtils.Color.ColorText.AnsiColorCommand(System.ConsoleColor? color, System.ConsoleColor? backgroundColor = null) -> string!
+static McMaster.Extensions.CommandLineUtils.Color.ColorText.AnsiResetColorCommand() -> string!
+static McMaster.Extensions.CommandLineUtils.Color.ColorText.implicit operator string!(McMaster.Extensions.CommandLineUtils.Color.ColorText colorText) -> string!

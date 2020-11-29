@@ -71,6 +71,7 @@ namespace McMaster.Extensions.CommandLineUtils
                 .UseVersionOptionFromMemberAttribute()
                 .UseVersionOptionAttribute()
                 .UseHelpOptionAttribute()
+                .UseColorOptionAttribute()
                 .UseOptionAttributes()
                 .UseArgumentAttributes()
                 .UseSubcommandAttributes();
@@ -143,6 +144,14 @@ namespace McMaster.Extensions.CommandLineUtils
         /// <returns>The builder.</returns>
         public static IConventionBuilder UseHelpOptionAttribute(this IConventionBuilder builder)
             => builder.AddConvention(new HelpOptionAttributeConvention());
+
+        /// <summary>
+        /// Applies settings from <see cref="ColorOptionAttribute" /> on the model type.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The builder.</returns>
+        public static IConventionBuilder UseColorOptionAttribute(this IConventionBuilder builder)
+            => builder.AddConvention(new ColorOptionAttributeConvention());
 
         /// <summary>
         /// Applies settings from <see cref="OptionAttribute" /> on the model type.

@@ -3,36 +3,77 @@
 
 using System;
 
-namespace McMaster.Extensions.CommandLineUtils.HelpText
+namespace McMaster.Extensions.CommandLineUtils.Color
 {
-    internal struct ColorText
+    /// <summary>
+    /// Provides support for emitting colored text to the console using virtual terminal (VT) commands. If text coloring
+    /// is not enabled no commands will be added to the text.
+    /// </summary>
+    public struct ColorText
     {
         private const string EscapeCode = "\u001b[";
         private const string Reset = EscapeCode + "0m";
         private readonly string _text;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColorText"/> struct.
+        /// </summary>
+        /// <param name="text">
+        /// The text to add color commands to.
+        /// </param>
+        /// <param name="color">
+        ///
+        /// </param>
+        /// <param name="backgroundColor"></param>
         public ColorText(string text, ConsoleColor? color, ConsoleColor? backgroundColor = null)
         {
             _text = AnsiColorCommand(color, backgroundColor) + text + AnsiResetColorCommand();
         }
 
-        public static bool Enabled { get; set; }
-
+        /// <inheritdoc />
         public override string ToString() => _text;
 
+        /// <summary>
+        /// Converts a <see cref="ColorText"/> instance to a string.
+        /// </summary>
+        /// <param name="colorText">
+        /// The instance to convert.
+        /// </param>
         public static implicit operator string(ColorText colorText)
         {
             return colorText._text;
         }
 
+        /// <summary>
+        /// Generates the virtual terminal command to reset the console colors back to their defaults. This can
+        /// be used as an alternative to a <see cref="ColorText"/> instance when commands need to be appended to text builders,
+        /// e.g. a <see cref="System.Text.StringBuilder"/>.
+        /// </summary>
+        /// <returns>
+        /// The virtual terminal command.
+        /// </returns>
         public static string AnsiResetColorCommand()
         {
-            return Enabled ? Reset : string.Empty;
+            return ConsoleColoring.IsEnabled ? Reset : string.Empty;
         }
 
+        /// <summary>
+        /// Generates the virtual terminal commands required to switch the console to the given color configuration. This can
+        /// be used as an alternative to a <see cref="ColorText"/> instance when commands need to be appended to text
+        /// builders, e.g. a <see cref="System.Text.StringBuilder"/>.
+        /// </summary>
+        /// <param name="color">
+        /// The foreground color to use.
+        /// </param>
+        /// <param name="backgroundColor">
+        /// The optional background color to use.
+        /// </param>
+        /// <returns>
+        /// The virtual terminal commands.
+        /// </returns>
         public static string AnsiColorCommand(ConsoleColor? color, ConsoleColor? backgroundColor = null)
         {
-            if (!Enabled)
+            if (!ConsoleColoring.IsEnabled)
             {
                 return string.Empty;
             }
